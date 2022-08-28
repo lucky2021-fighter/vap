@@ -37,6 +37,8 @@ public class CommonArg {
 
     public int bitrate = 2000; // 码率
 
+    public int iFrame = 0; // 关键帧间隔
+
     public int crf = 29; // 0(无损) - 50(最大压缩)
 
     /**
@@ -84,6 +86,7 @@ public class CommonArg {
                 ", fps=" + fps +
                 ", enableCrf=" + enableCrf +
                 ", bitrate=" + bitrate +
+                ", iFrame=" + iFrame +
                 ", crf=" + crf +
                 ", scale=" + scale +
                 ", inputPath='" + inputPath + '\'' +

@@ -205,6 +205,19 @@ class HardDecoder(player: AnimPlayer) : Decoder(player), SurfaceTexture.OnFrameA
                 val inputBufIndex = decoder.dequeueInputBuffer(TIMEOUT_USEC)
                 if (inputBufIndex >= 0) {
                     val inputBuf = decoderInputBuffers[inputBufIndex]
+                    if (inputChunk == 20) {
+                        ALog.i(TAG, "###### inputChunk=${inputChunk} ######")
+                        val expectedPts = 2048000L
+                        var currentPts = 0L
+                        extractor.seekTo(expectedPts, MediaExtractor.SEEK_TO_CLOSEST_SYNC)
+                        while (inputChunk < 40) {
+                            extractor.readSampleData(inputBuf, 0)
+                            currentPts = extractor.sampleTime
+                            inputChunk++
+                            extractor.advance()
+                            ALog.i(TAG, "currentPts=$currentPts")
+                        }
+                    }
                     val chunkSize = extractor.readSampleData(inputBuf, 0)
                     if (chunkSize < 0) {
                         decoder.queueInputBuffer(inputBufIndex, 0, 0, 0L, MediaCodec.BUFFER_FLAG_END_OF_STREAM)

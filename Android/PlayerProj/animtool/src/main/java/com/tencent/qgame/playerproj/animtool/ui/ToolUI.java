@@ -66,6 +66,8 @@ public class ToolUI {
     private final JTextField textBitrate = new JTextField();
     private final JPanel panelCrf = new JPanel();
     private final JTextField textCrf = new JTextField();
+    private final JPanel panelIFrame = new JPanel();
+    private final JTextField textIFrame= new JTextField();
 
     private final ButtonGroup groupQuality = new ButtonGroup();
     private final JRadioButton btnBitrate = new JRadioButton("bitrate");
@@ -129,6 +131,7 @@ public class ToolUI {
             textInputPath.setText(commonArg.inputPath);
             textAudioPath.setText(commonArg.audioPath);
             textBitrate.setText(String.valueOf(commonArg.bitrate));
+            textIFrame.setText(String.valueOf(commonArg.iFrame));
             textCrf.setText(String.valueOf(commonArg.crf));
             groupQuality.setSelected(commonArg.enableCrf ? btnCrf.getModel() : btnBitrate.getModel(), true);
             if (commonArg.enableCrf) {
@@ -202,6 +205,7 @@ public class ToolUI {
         try {
             commonArg.enableCrf = groupQuality.isSelected(btnCrf.getModel());
             commonArg.bitrate = Integer.parseInt(textBitrate.getText());
+            commonArg.iFrame = Integer.parseInt(textIFrame.getText());
             commonArg.crf = Integer.parseInt(textCrf.getText());
         } catch (NumberFormatException e) {
             TLog.e(TAG, "bitrate format error " + textBitrate.getText() + e.getMessage());
@@ -272,6 +276,8 @@ public class ToolUI {
         panel.add(getQualityLayout());
         // bitrate
         panel.add(getBitrateLayout());
+        //i-Frame interval
+        panel.add(getIFrameIntervalLayout());
         // crf
         panel.add(getCrfLayout());
         // scale
@@ -354,6 +360,17 @@ public class ToolUI {
         panelBitrate.add(textBitrate);
         panelBitrate.add(new JLabel("k (default 2000k)"));
         return panelBitrate;
+    }
+
+    private JPanel getIFrameIntervalLayout() {
+        panelIFrame.setLayout(new FlowLayout(FlowLayout.LEFT));
+        JLabel label = new JLabel("iframe interval");
+        label.setPreferredSize(labelSize);
+        panelIFrame.add(label);
+        textIFrame.setPreferredSize(new Dimension(60, 20));
+        panelIFrame.add(textIFrame);
+        panelIFrame.add(new JLabel("int (default system determined)"));
+        return panelIFrame;
     }
 
     private JPanel getCrfLayout() {
@@ -549,6 +566,7 @@ public class ToolUI {
             String scale = props.getProperty("scale", String.valueOf(scaleArray[0]));
             String audioPath = props.getProperty("audioPath", "");
             String bitrate = props.getProperty("bitrate", String.valueOf(commonArg.bitrate));
+            String iFrame = props.getProperty("iFrame", String.valueOf(commonArg.iFrame));
             String enableCrf = props.getProperty("enableCrf", String.valueOf(commonArg.enableCrf));
             String crf = props.getProperty("crf", String.valueOf(commonArg.crf));
 
@@ -561,6 +579,7 @@ public class ToolUI {
             commonArg.inputPath = inputPath;
             commonArg.audioPath = audioPath;
             commonArg.bitrate = Integer.parseInt(bitrate);
+            commonArg.iFrame = Integer.parseInt(iFrame);
             commonArg.enableCrf = Boolean.TRUE.toString().equals(enableCrf);
             commonArg.crf = Integer.parseInt(crf);
         } catch (Exception e) {
@@ -578,6 +597,7 @@ public class ToolUI {
         props.setProperty("audioPath", commonArg.audioPath == null ? "" : commonArg.audioPath);
         props.setProperty("scale", String.valueOf(commonArg.scale));
         props.setProperty("bitrate", String.valueOf(commonArg.bitrate));
+        props.setProperty("iFrame", String.valueOf(commonArg.iFrame));
         props.setProperty("crf", String.valueOf(commonArg.crf));
         props.setProperty("enableCrf", String.valueOf(commonArg.enableCrf));
         props.store(new OutputStreamWriter(new FileOutputStream(PROPERTIES_FILE), StandardCharsets.UTF_8), "");

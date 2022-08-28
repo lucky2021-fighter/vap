@@ -345,27 +345,57 @@ public class AnimTool {
 
         } else {
             if (commonArg.enableCrf) {
-                cmd = new String[]{commonArg.ffmpegCmd, "-framerate", String.valueOf(commonArg.fps),
-                        "-i", frameImagePath + "%03d.png",
-                        "-pix_fmt", "yuv420p",
-                        "-vcodec", "libx264",
-                        "-crf", Integer.toString(commonArg.crf),
-                        "-profile:v", "main",
-                        "-level", "4.0",
-                        "-bf", "0",
-                        "-bufsize", "2000k",
-                        "-y", videoPath + TEMP_VIDEO_FILE};
+                if (commonArg.iFrame > 0)
+                    cmd = new String[]{commonArg.ffmpegCmd, "-framerate", String.valueOf(commonArg.fps),
+                            "-i", frameImagePath + "%03d.png",
+                            "-pix_fmt", "yuv420p",
+                            "-vcodec", "libx264",
+                            "-crf", Integer.toString(commonArg.crf),
+                            "-profile:v", "main",
+                            "-level", "4.0",
+                            "-bf", "0",
+                            "-bufsize", "2000k",
+                            "-keyint_min", String.valueOf(commonArg.iFrame),
+                            "-g", String.valueOf(commonArg.iFrame),
+                            "-sc_threshold", "0",
+                            "-y", videoPath + TEMP_VIDEO_FILE};
+                else
+                    cmd = new String[]{commonArg.ffmpegCmd, "-framerate", String.valueOf(commonArg.fps),
+                            "-i", frameImagePath + "%03d.png",
+                            "-pix_fmt", "yuv420p",
+                            "-vcodec", "libx264",
+                            "-crf", Integer.toString(commonArg.crf),
+                            "-profile:v", "main",
+                            "-level", "4.0",
+                            "-bf", "0",
+                            "-bufsize", "2000k",
+                            "-y", videoPath + TEMP_VIDEO_FILE};
             } else {
-                cmd = new String[]{commonArg.ffmpegCmd, "-framerate", String.valueOf(commonArg.fps),
-                        "-i", frameImagePath + "%03d.png",
-                        "-pix_fmt", "yuv420p",
-                        "-vcodec", "libx264",
-                        "-b:v", commonArg.bitrate + "k",
-                        "-profile:v", "main",
-                        "-level", "4.0",
-                        "-bf", "0",
-                        "-bufsize", "2000k",
-                        "-y", videoPath + TEMP_VIDEO_FILE};
+                if (commonArg.iFrame > 0)
+                    cmd = new String[]{commonArg.ffmpegCmd, "-framerate", String.valueOf(commonArg.fps),
+                            "-i", frameImagePath + "%03d.png",
+                            "-pix_fmt", "yuv420p",
+                            "-vcodec", "libx264",
+                            "-crf", Integer.toString(commonArg.crf),
+                            "-profile:v", "main",
+                            "-level", "4.0",
+                            "-bf", "0",
+                            "-bufsize", "2000k",
+                            "-keyint_min", String.valueOf(commonArg.iFrame),
+                            "-g", String.valueOf(commonArg.iFrame),
+                            "-sc_threshold", "0",
+                            "-y", videoPath + TEMP_VIDEO_FILE};
+                else
+                    cmd = new String[]{commonArg.ffmpegCmd, "-framerate", String.valueOf(commonArg.fps),
+                            "-i", frameImagePath + "%03d.png",
+                            "-pix_fmt", "yuv420p",
+                            "-vcodec", "libx264",
+                            "-b:v", commonArg.bitrate + "k",
+                            "-profile:v", "main",
+                            "-level", "4.0",
+                            "-bf", "0",
+                            "-bufsize", "2000k",
+                            "-y", videoPath + TEMP_VIDEO_FILE};
             }
 
         }
